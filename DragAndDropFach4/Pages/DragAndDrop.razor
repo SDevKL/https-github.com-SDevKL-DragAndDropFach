@@ -1,0 +1,70 @@
+﻿@page "/DragAndDrop"
+
+<div class="dragdrop-container">
+    @if (!isDropped)
+    {
+        <div class="draggable"
+             @ondragstart="OnDragStart"
+             @ondragend="OnDragEnd"
+             draggable="true"
+             style=@($"user-select:none;{(isDragging ? "opacity:1;" : string.Empty)}")>
+            Zieh mich!
+        </div>
+    }
+
+    <div class="dropzone @dropClass"
+         ondragover="event.preventDefault();"
+         @ondragenter="OnDragEnter"
+         @ondragleave="OnDragLeave"
+         @ondrop="OnDrop"
+         style="min-height:60px;display:flex;align-items:center;justify-content:center;">
+        @if (isDropped)
+        {
+            <div class="draggable"
+                 style="user-select:none;">
+                Zieh mich!
+            </div>
+        }
+    </div>
+</div>
+
+
+@code {
+    private bool isDropped = false;
+    private bool isDragging = false;
+    private string dropClass = string.Empty;
+
+    private void OnDragStart()
+    {
+        isDragging = true;
+    }
+
+    private void OnDragEnd()
+    {
+        isDragging = false;
+    }
+
+    private void OnDragEnter(DragEventArgs e)
+    {
+        if (!isDropped)
+        {
+            dropClass = "can-drop";
+        }
+    }
+
+    private void OnDragLeave(DragEventArgs e)
+    {
+        if (!isDropped)
+        {
+            dropClass = string.Empty;
+        }
+    }
+
+    private void OnDrop(DragEventArgs e)
+    {
+        dropClass = string.Empty;
+        isDragging = false;
+        isDropped = true;
+    }
+
+}
